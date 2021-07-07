@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task_cart/presentation/screens/Cart/cartpage.dart';
 import 'package:task_cart/presentation/screens/Favroties/favroties.dart';
@@ -7,9 +8,7 @@ import 'package:task_cart/presentation/screens/home_screen/home.dart';
 import '../../../core/constants/strings.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key ?key,  required this.title}) : super(key: key);
-
-  
+  HomeScreen({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -18,69 +17,76 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
 
-   int _pageIndex = 0;
-  PageController ?_pageController;
+  void _onTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+      
+  List<BottomNavigationBarItem> _item = [
+    BottomNavigationBarItem(
+        icon: Icon(Icons.home_outlined),
+        label: "Home",
+        backgroundColor: Colors.black),
+    BottomNavigationBarItem(
+        icon: Icon(Icons.shopping_bag_outlined),
+        label: "Cart",
+        backgroundColor: Colors.black),
+    BottomNavigationBarItem(
+        icon: Icon(CupertinoIcons.heart),
+        label: "list",
+        backgroundColor: Colors.black),
+    BottomNavigationBarItem(
+        icon: Icon(CupertinoIcons.profile_circled),
+        label: "Profile",
+        backgroundColor: Colors.black)
+  ];
 
-  List<Widget> tabPages = [
-    Home(),
+  static const List<Widget> _tabs = <Widget>[
+    Text(
+      'DashBoard',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
     Cart(),
-    Favroties(),
+    Text(
+      'List',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
     Profile(),
   ];
 
   @override
-  void initState(){
-    super.initState();
-    _pageController = PageController(initialPage: _pageIndex);
-  }
-
-  @override
-  void dispose() {
-    _pageController?.dispose();
-    super.dispose();
-  }
-  
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              Strings.homeScreenCenterText,
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        child: _tabs.elementAt(_currentIndex),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+           borderRadius: BorderRadius.only(
+            topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+        boxShadow: [
+          BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+        ],
+        ),
+      
+        child: ClipRRect(
+           borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),),
+          child: BottomNavigationBar(
+            items: _item,
+            type: BottomNavigationBarType.shifting,
+            currentIndex: _currentIndex,
+            selectedItemColor: Colors.white38,
+            onTap: _onTapped,
+            backgroundColor: Colors.white38,
+          ),
+            
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _pageIndex,
-        onTap: onTabTapped,
-        backgroundColor: Colors.black,
-        fixedColor: Colors.black,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem( icon: Icon(Icons.home), title: Text("Home")),
-          BottomNavigationBarItem(icon: Icon(Icons.mail), title: Text("Messages")),
-          BottomNavigationBarItem(icon: Icon(Icons.hearing_outlined), title: Text("Profile")),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle_outlined), title: Text("Profile")),
-        ],
-
-      ),
     );
-  }
-
-  void onPageChanged(int page) {
-    setState(() {
-      this._pageIndex = page;
-    });
-  }
-
-  void onTabTapped(int index) {
-    this._pageController?.animateToPage(index,duration: const Duration(milliseconds: 500),curve: Curves.easeInOut);
   }
 }
