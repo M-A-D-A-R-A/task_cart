@@ -160,11 +160,11 @@ class _ProfileState extends State<Profile> {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              _suggCards('assets/images/boy.png', 'Size & Fit',
+              _suggCards('assets/images/beard.png', 'Size & Fit',
                   'Your Size & Fit Preferences', Colors.blue[100]),
-              _suggCards('assets/images/boy.png', 'Style',
+              _suggCards('assets/images/beard.png', 'Style',
                   'Your Style Preferences', Colors.pink[100]),
-              _suggCards('assets/images/boy.png', 'Closet',
+              _suggCards('assets/images/hanger.png', 'Closet',
                   'Your Closet', Colors.brown[100]),
             ],
           ),
